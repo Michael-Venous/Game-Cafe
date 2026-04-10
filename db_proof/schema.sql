@@ -101,3 +101,29 @@ CREATE TABLE Order_Status (
     PRIMARY KEY (status_id),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
+
+CREATE VIEW view_session_summary AS
+SELECT
+    se.session_id,
+    c.Name         AS customer_name,
+    c.email,
+    st.station_type,
+    se.start_time,
+    se.end_time,
+    se.total_cost,
+    TIMESTAMPDIFF(MINUTE, se.start_time, se.end_time) AS duration_minutes
+FROM Session se
+JOIN Customer c  ON se.customer_id = c.Customer_id
+JOIN station st  ON se.station_id  = st.station_id;
+
+CREATE VIEW view_station_availability AS
+SELECT
+    s.station_id,
+    s.station_type,
+    s.hourly_rate,
+    s.availability,
+    COUNT(g.game_id) AS num_games
+FROM station s
+LEFT JOIN station_game sg ON s.station_id = sg.station_id
+LEFT JOIN game g ON sg.game_id = g.game_id
+GROUP BY s.station_id, s.station_type, s.hourly_rate, s.availability;

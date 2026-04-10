@@ -372,3 +372,51 @@ def delete_customer():
     except Error as e:
         print(f"  DB Error: {e}")
     pause()
+
+def view_session_summary():
+    header("Session Summary (via view)")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT session_id, customer_name, email, station_type,
+                   start_time, end_time, total_cost, duration_minutes
+            FROM view_session_summary
+            ORDER BY session_id
+        """)
+        rows = cur.fetchall()
+        print_table(
+            ["ID", "Customer", "Email", "Station", "Start", "End", "Cost ($)", "Min"],
+            rows
+        )
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+
+def view_station_availability():
+    header("Station Availability (via view)")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT station_id, station_type, hourly_rate,
+                   availability, num_games
+            FROM view_station_availability
+            ORDER BY station_id
+        """)
+        rows = cur.fetchall()
+        # Convert availability boolean to readable text
+        display = [
+            (sid, stype, rate, "Available" if avail else "In Use", games)
+            for sid, stype, rate, avail, games in rows
+        ]
+        print_table(
+            ["Station ID", "Type", "Rate ($/hr)", "Status", "# Games"],
+            display
+        )
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
