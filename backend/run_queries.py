@@ -5,7 +5,6 @@ import os
 
 load_dotenv()
 
-# ── DB config
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "user": os.getenv("DB_USER", "root"),
