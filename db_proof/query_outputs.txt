@@ -134,15 +134,3 @@ JOIN Customer c ...
   4         Peter Jones  9.99          Pending    <19  Waiting for staff      
   3         John Doe     24.50         Delivered  <19  Order completed        
   2         Peter Jones  12.99         Preparing  <19  Order is being prepared
-
-────────────────────────────────────────────────────────────
-  Query 10
-────────────────────────────────────────────────────────────
-  SQL: CREATE TRIGGER before_updated_at_update
-BEFORE UPDATE ON Order_Status
-FOR EACH ROW
-SET NEW.updated_at = NOW()
-
-  Total rows returned: 0
-
-  0 rows returned.
