@@ -55,6 +55,7 @@ def main():
         print("  3. EMPLOYEE TABLE")
         print("  4. MENU ITEMS TABLE")
         print("  5. CUSTOMERS TABLE")
+        print("  6. VIEWS")
         print("  0. Exit")
         choice = input("\n  Select an option: ").strip()
 
@@ -129,6 +130,19 @@ def main():
             elif secondChoice == "0":
                 print("\n  Goodbye!\n")
                 break
+            else:
+                print("  Invalid option.")
+        elif choice == "6":
+            print("  1. Session Summary")
+            print("  2. Station Availability")
+            print("  0. Back")
+            secondChoice = input("\n  Select an option: ").strip()
+            if secondChoice == "1":
+                session_logic.view_session_summary()
+            elif secondChoice == "2":
+                session_logic.view_station_availability()
+            elif secondChoice == "0":
+                pass
             else:
                 print("  Invalid option.")
         elif choice == "0":
