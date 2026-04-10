@@ -1,0 +1,42 @@
+QUERY OUTPUTS
+============================================================
+
+────────────────────────────────────────────────────────────
+  Query 1
+────────────────────────────────────────────────────────────
+  SQL: SELECT * FROM Customer
+
+  Total rows returned: 2
+
+  First 2 row(s):
+  Customer_id  Name         email                    Membership
+  -----------  -----------  -----------------------  ----------
+  161          John Doe     john.doe@example.com     1         
+  301          Peter Jones  peter.jones@example.com  0         
+
+────────────────────────────────────────────────────────────
+  Query 2
+────────────────────────────────────────────────────────────
+  SQL: SELECT * FROM Session WHERE end_time IS NULL
+
+  Total rows returned: 1
+
+  First 1 row(s):
+  session_id  customer_id  station_id  start_time           end_time  total_cost
+  ----------  -----------  ----------  -------------------  --------  ----------
+  2           301          2           <19  NULL      NULL      
+
+────────────────────────────────────────────────────────────
+  Query 3
+────────────────────────────────────────────────────────────
+  SQL: SELECT c.Name, COUNT(s.session_id) AS total_sessions
+FROM Customer c JOIN Session s ON c.Customer_id = s.customer_id
+GRO...
+
+  Total rows returned: 2
+
+  First 2 row(s):
+  Name         total_sessions
+  -----------  --------------
+  John Doe     2             
+  Peter Jones  1             
