@@ -40,3 +40,109 @@ GRO...
   -----------  --------------
   John Doe     2             
   Peter Jones  1             
+
+────────────────────────────────────────────────────────────
+  Query 4
+────────────────────────────────────────────────────────────
+  SQL: SELECT s.station_id, s.station_type, g.title, g.genre, g.difficulty
+FROM station s
+JOIN station_game sg ON s.station_id ...
+
+  Total rows returned: 6
+
+  First 5 row(s):
+  station_id  station_type  title          genre         difficulty
+  ----------  ------------  -------------  ------------  ----------
+  1           PC            Silksong       Metroidvania  8         
+  1           PC            CounterStrike  FPS           10        
+  1           PC            Balatro        Roguelike     3         
+  2           VR            CounterStrike  FPS           10        
+  3           Console       Silksong       Metroidvania  8         
+
+────────────────────────────────────────────────────────────
+  Query 5
+────────────────────────────────────────────────────────────
+  SQL: SELECT c.Name, COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_spent
+FROM Customer c
+JOIN Orders o ON c....
+
+  Total rows returned: 2
+
+  First 2 row(s):
+  Name         total_orders  total_spent
+  -----------  ------------  -----------
+  John Doe     1             24.50      
+  Peter Jones  2             22.98      
+
+────────────────────────────────────────────────────────────
+  Query 6
+────────────────────────────────────────────────────────────
+  SQL: SELECT c.Name AS customer_name, s.station_type, sess.start_time
+FROM Session sess
+JOIN Customer c ON sess.customer_id = ...
+
+  Total rows returned: 1
+
+  First 1 row(s):
+  customer_name  station_type  start_time         
+  -------------  ------------  -------------------
+  Peter Jones    VR            <19
+
+────────────────────────────────────────────────────────────
+  Query 7
+────────────────────────────────────────────────────────────
+  SQL: SELECT c.Name AS customer, e.Name AS employee, mi.Name AS item, oi.quantity, oi.subtotal
+FROM Orders o
+JOIN Customer c O...
+
+  Total rows returned: 3
+
+  First 3 row(s):
+  customer     employee     item    quantity  subtotal
+  -----------  -----------  ------  --------  --------
+  Peter Jones  John Jacobs  Fries   3         13.05   
+  Peter Jones  John Jacobs  Fries   2         8.70    
+  John Doe     John Jacobs  Burger  1         9.99    
+
+────────────────────────────────────────────────────────────
+  Query 8
+────────────────────────────────────────────────────────────
+  SQL: SELECT s.station_id, s.station_type, COUNT(sess.session_id) AS total_sessions, SUM(sess.total_cost) AS total_revenue
+FRO...
+
+  Total rows returned: 3
+
+  First 3 row(s):
+  station_id  station_type  total_sessions  total_revenue
+  ----------  ------------  --------------  -------------
+  1           PC            1               10.00        
+  2           VR            1               NULL         
+  3           Console       1               20.00        
+
+────────────────────────────────────────────────────────────
+  Query 9
+────────────────────────────────────────────────────────────
+  SQL: SELECT o.order_id, c.Name AS customer, o.total_amount, os.status, os.updated_at, os.notes
+FROM Orders o
+JOIN Customer c ...
+
+  Total rows returned: 3
+
+  First 3 row(s):
+  order_id  customer     total_amount  status     updated_at           notes                  
+  --------  -----------  ------------  ---------  -------------------  -----------------------
+  4         Peter Jones  9.99          Pending    <19  Waiting for staff      
+  3         John Doe     24.50         Delivered  <19  Order completed        
+  2         Peter Jones  12.99         Preparing  <19  Order is being prepared
+
+────────────────────────────────────────────────────────────
+  Query 10
+────────────────────────────────────────────────────────────
+  SQL: CREATE TRIGGER before_updated_at_update
+BEFORE UPDATE ON Order_Status
+FOR EACH ROW
+SET NEW.updated_at = NOW()
+
+  Total rows returned: 0
+
+  0 rows returned.
