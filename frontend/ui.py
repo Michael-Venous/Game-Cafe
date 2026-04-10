@@ -1,14 +1,12 @@
 import sys
 import os
 
-# This allows the frontend to import your backend logic
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend import session_logic
 
 LINE = "─" * 70
 
 def print_table(headers, rows):
-    """Helper function from Aadil's code to format terminal output cleanly."""
     if not rows:
         print("  (no records found)")
         return
@@ -56,6 +54,7 @@ def main():
         print("  4. MENU ITEMS TABLE")
         print("  5. CUSTOMERS TABLE")
         print("  6. VIEWS")
+        print("  7. REPORTS / ANALYTICS")
         print("  0. Exit")
         choice = input("\n  Select an option: ").strip()
 
@@ -82,8 +81,7 @@ def main():
             elif secondChoice == "5":
                 session_logic.delete_employee()
             elif secondChoice == "0":
-                print("\n  Goodbye!\n")
-                break
+                pass
             else:
                 print("  Invalid option.")
         elif choice == "4":
@@ -105,8 +103,7 @@ def main():
             elif secondChoice == "5":
                 session_logic.delete_menuitem()
             elif secondChoice == "0":
-                print("\n  Goodbye!\n")
-                break
+                pass
             else:
                 print("  Invalid option.")
         elif choice == "5":
@@ -128,8 +125,7 @@ def main():
             elif secondChoice == "5":
                 session_logic.delete_customer()
             elif secondChoice == "0":
-                print("\n  Goodbye!\n")
-                break
+                pass
             else:
                 print("  Invalid option.")
         elif choice == "6":
@@ -141,6 +137,37 @@ def main():
                 session_logic.view_session_summary()
             elif secondChoice == "2":
                 session_logic.view_station_availability()
+            elif secondChoice == "0":
+                pass
+            else:
+                print("  Invalid option.")
+        elif choice == "7":
+            print("  1. Query 2: Active Sessions (No end time)")
+            print("  2. Query 3: Customer Total Sessions")
+            print("  3. Query 4: Games Available per Station")
+            print("  4. Query 5: Customer Total Spending")
+            print("  5. Query 6: Active Session Details")
+            print("  6. Query 7: Full Order Breakdown")
+            print("  7. Query 8: Revenue per Station")
+            print("  8. Query 9: Order Status & Notes")
+            print("  0. Back")
+            secondChoice = input("\n  Select an option: ").strip()
+            if secondChoice == "1":
+                session_logic.run_query_2()
+            elif secondChoice == "2":
+                session_logic.run_query_3()
+            elif secondChoice == "3":
+                session_logic.run_query_4()
+            elif secondChoice == "4":
+                session_logic.run_query_5()
+            elif secondChoice == "5":
+                session_logic.run_query_6()
+            elif secondChoice == "6":
+                session_logic.run_query_7()
+            elif secondChoice == "7":
+                session_logic.run_query_8()
+            elif secondChoice == "8":
+                session_logic.run_query_9()
             elif secondChoice == "0":
                 pass
             else:

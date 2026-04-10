@@ -127,3 +127,8 @@ FROM station s
 LEFT JOIN station_game sg ON s.station_id = sg.station_id
 LEFT JOIN game g ON sg.game_id = g.game_id
 GROUP BY s.station_id, s.station_type, s.hourly_rate, s.availability;
+
+CREATE TRIGGER before_updated_at_update
+BEFORE UPDATE ON Order_Status
+FOR EACH ROW
+SET NEW.updated_at = NOW();

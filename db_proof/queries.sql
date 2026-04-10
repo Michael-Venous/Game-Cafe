@@ -51,7 +51,4 @@ JOIN Customer c ON o.customer_id = c.Customer_id
 JOIN Order_Status os ON o.order_id = os.order_id
 ORDER BY os.updated_at DESC;
 
-CREATE TRIGGER before_updated_at_update
-BEFORE UPDATE ON Order_Status
-FOR EACH ROW
-SET NEW.updated_at = NOW();
+

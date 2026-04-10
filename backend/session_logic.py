@@ -90,9 +90,7 @@ def create_active_session(customer_id, station_id):
     except Error as e:
         return f"Error: {e}"
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  EMPLOYEE MENU
-# ══════════════════════════════════════════════════════════════════════════════
 def view_employees():
     header("All Employees")
     try:
@@ -183,9 +181,7 @@ def delete_employee():
         print(f"  DB Error: {e}")
     pause()
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  MENU ITEM MENU
-# ══════════════════════════════════════════════════════════════════════════════
 def view_menuitems():
     header("All Menu Items")
     try:
@@ -277,10 +273,7 @@ def delete_menuitem():
         print(f"  DB Error: {e}")
     pause()
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  CUSTOMER MENU
-# ══════════════════════════════════════════════════════════════════════════════
-
 def view_customers():
     header("All Customers")
     try:
@@ -419,6 +412,152 @@ def view_station_availability():
             ["Station ID", "Type", "Rate ($/hr)", "Status", "# Games"],
             display
         )
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+
+#  ANALYTICS / QUERIES MENU
+
+
+def run_query_2():
+    header("Query 2: Sessions with no end time")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Session WHERE end_time IS NULL")
+        rows = cur.fetchall()
+        print_table(["Session ID", "Customer ID", "Station ID", "Start Time", "End Time", "Total Cost"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_3():
+    header("Query 3: Customer Total Sessions")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT c.Name, COUNT(s.session_id) AS total_sessions
+            FROM Customer c JOIN Session s ON c.Customer_id = s.customer_id
+            GROUP BY c.Name
+        """)
+        rows = cur.fetchall()
+        print_table(["Customer Name", "Total Sessions"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_4():
+    header("Query 4: Games Available per Station")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT s.station_id, s.station_type, g.title, g.genre, g.difficulty
+            FROM station s
+            JOIN station_game sg ON s.station_id = sg.station_id
+            JOIN game g ON sg.game_id = g.game_id
+        """)
+        rows = cur.fetchall()
+        print_table(["Station ID", "Type", "Game Title", "Genre", "Difficulty"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_5():
+    header("Query 5: Customer Total Spending")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT c.Name, COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_spent
+            FROM Customer c
+            JOIN Orders o ON c.Customer_id = o.customer_id
+            GROUP BY c.Customer_id, c.Name
+        """)
+        rows = cur.fetchall()
+        print_table(["Customer Name", "Total Orders", "Total Spent ($)"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_6():
+    header("Query 6: Active Session Details")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT c.Name AS customer_name, s.station_type, sess.start_time
+            FROM Session sess
+            JOIN Customer c ON sess.customer_id = c.Customer_id
+            JOIN station s ON sess.station_id = s.station_id
+            WHERE sess.end_time IS NULL
+        """)
+        rows = cur.fetchall()
+        print_table(["Customer Name", "Station Type", "Start Time"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_7():
+    header("Query 7: Full Order Breakdown")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT c.Name AS customer, e.Name AS employee, mi.Name AS item, oi.quantity, oi.subtotal
+            FROM Orders o
+            JOIN Customer c ON o.customer_id = c.Customer_id
+            JOIN Employee e ON o.employee_id = e.Employee_id
+            JOIN Order_Item oi ON o.order_id = oi.order_id
+            JOIN MenuItem mi ON oi.item_id = mi.Item_id
+        """)
+        rows = cur.fetchall()
+        print_table(["Customer", "Employee", "Item", "Quantity", "Subtotal ($)"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_8():
+    header("Query 8: Revenue per Station")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT s.station_id, s.station_type, COUNT(sess.session_id) AS total_sessions, SUM(sess.total_cost) AS total_revenue
+            FROM station s
+            LEFT JOIN Session sess ON s.station_id = sess.station_id
+            GROUP BY s.station_id, s.station_type
+        """)
+        rows = cur.fetchall()
+        print_table(["Station ID", "Type", "Total Sessions", "Total Revenue ($)"], rows)
+        cur.close(); conn.close()
+    except Error as e:
+        print(f"  DB Error: {e}")
+    pause()
+
+def run_query_9():
+    header("Query 9: Order Status & Notes")
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT o.order_id, c.Name AS customer, o.total_amount, os.status, os.updated_at, os.notes
+            FROM Orders o
+            JOIN Customer c ON o.customer_id = c.Customer_id
+            JOIN Order_Status os ON o.order_id = os.order_id
+            ORDER BY os.updated_at DESC
+        """)
+        rows = cur.fetchall()
+        print_table(["Order ID", "Customer", "Total Amount ($)", "Status", "Updated At", "Notes"], rows)
         cur.close(); conn.close()
     except Error as e:
         print(f"  DB Error: {e}")
