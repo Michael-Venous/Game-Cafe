@@ -1,12 +1,14 @@
 import sys
 import os
 
+# This allows the frontend to import your backend logic
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend import session_logic
 
 LINE = "─" * 70
 
 def print_table(headers, rows):
+    """Helper function to format terminal output cleanly."""
     if not rows:
         print("  (no records found)")
         return
@@ -26,6 +28,7 @@ def print_table(headers, rows):
         print(fmt.format(*clean_row))
 
 def view_sessions():
+    """Query 1: View all sessions logic."""
     print(f"\n{LINE}\n  ALL GAME CAFE SESSIONS\n{LINE}")
     rows = session_logic.get_all_sessions()
     print_table(["Session ID", "Customer ID", "Station ID", "Start Time", "End Time", "Total Cost ($)"], rows)
@@ -48,27 +51,26 @@ def main():
         print(f"\n{LINE}")
         print("  GAME CAFE")
         print(LINE)
-        print("  1. View all Sessions")
-        print("  2. Start a new Session")
-        print("  3. EMPLOYEE TABLE")
-        print("  4. MENU ITEMS TABLE")
-        print("  5. CUSTOMERS TABLE")
-        print("  6. VIEWS")
-        print("  7. REPORTS / ANALYTICS")
+        print("  1. Start a new Session")
+        print("  2. EMPLOYEE TABLE")
+        print("  3. MENU ITEMS TABLE")
+        print("  4. CUSTOMERS TABLE")
+        print("  5. VIEWS")
+        print("  6. REPORTS / ANALYTICS (Queries)")
         print("  0. Exit")
         choice = input("\n  Select an option: ").strip()
 
         if choice == "1":
-            view_sessions()
-        elif choice == "2":
             start_new_session()
-        elif choice == "3":
-            print("  1. View all menu items")
-            print("  2. Search item by ID")
-            print("  3. Add new menu item")
-            print("  4. Update item price")
-            print("  5. Delete menu item")
-            print("  0. Exit")
+
+        elif choice == "2":
+            print("\n  EMPLOYEE MANAGEMENT")
+            print("  1. View all employees")
+            print("  2. Search employee by ID")
+            print("  3. Add new employee")
+            print("  4. Update employee wage")
+            print("  5. Delete employee")
+            print("  0. Back")
             secondChoice = input("\n  Select an option: ").strip()
             if secondChoice == "1":
                 session_logic.view_employees()
@@ -80,17 +82,15 @@ def main():
                 session_logic.update_employee_wage()
             elif secondChoice == "5":
                 session_logic.delete_employee()
-            elif secondChoice == "0":
-                pass
-            else:
-                print("  Invalid option.")
-        elif choice == "4":
+
+        elif choice == "3":
+            print("\n  MENU ITEM MANAGEMENT")
             print("  1. View all menu items")
             print("  2. Search item by ID")
             print("  3. Add new menu item")
             print("  4. Update item price")
             print("  5. Delete menu item")
-            print("  0. Exit")
+            print("  0. Back")
             secondChoice = input("\n  Select an option: ").strip()
             if secondChoice == "1":
                 session_logic.view_menuitems()
@@ -102,17 +102,15 @@ def main():
                 session_logic.update_menuitem_price()
             elif secondChoice == "5":
                 session_logic.delete_menuitem()
-            elif secondChoice == "0":
-                pass
-            else:
-                print("  Invalid option.")
-        elif choice == "5":
+
+        elif choice == "4":
+            print("\n  CUSTOMER MANAGEMENT")
             print("  1. View all customers")
             print("  2. Search customer by ID")
             print("  3. Add new customer")
             print("  4. Toggle membership status")
             print("  5. Delete customer")
-            print("  0. Exit")
+            print("  0. Back")
             secondChoice = input("\n  Select an option: ").strip()
             if secondChoice == "1":
                 session_logic.view_customers()
@@ -124,11 +122,9 @@ def main():
                 session_logic.toggle_membership()
             elif secondChoice == "5":
                 session_logic.delete_customer()
-            elif secondChoice == "0":
-                pass
-            else:
-                print("  Invalid option.")
-        elif choice == "6":
+
+        elif choice == "5":
+            print("\n  DATABASE VIEWS")
             print("  1. Session Summary")
             print("  2. Station Availability")
             print("  0. Back")
@@ -137,41 +133,40 @@ def main():
                 session_logic.view_session_summary()
             elif secondChoice == "2":
                 session_logic.view_station_availability()
-            elif secondChoice == "0":
-                pass
-            else:
-                print("  Invalid option.")
-        elif choice == "7":
-            print("  1. Query 2: Active Sessions (No end time)")
-            print("  2. Query 3: Customer Total Sessions")
-            print("  3. Query 4: Games Available per Station")
-            print("  4. Query 5: Customer Total Spending")
-            print("  5. Query 6: Active Session Details")
-            print("  6. Query 7: Full Order Breakdown")
-            print("  7. Query 8: Revenue per Station")
-            print("  8. Query 9: Order Status & Notes")
+
+        elif choice == "6":
+            print("\n  REPORTS / ANALYTICS")
+            print("  1. Query 1: View all Sessions")
+            print("  2. Query 2: Active Sessions (No end time)")
+            print("  3. Query 3: Customer Total Sessions")
+            print("  4. Query 4: Games Available per Station")
+            print("  5. Query 5: Customer Total Spending")
+            print("  6. Query 6: Active Session Details")
+            print("  7. Query 7: Full Order Breakdown")
+            print("  8. Query 8: Revenue per Station")
+            print("  9. Query 9: Order Status & Notes")
             print("  0. Back")
             secondChoice = input("\n  Select an option: ").strip()
+
             if secondChoice == "1":
-                session_logic.run_query_2()
+                view_sessions()
             elif secondChoice == "2":
-                session_logic.run_query_3()
+                session_logic.run_query_2()
             elif secondChoice == "3":
-                session_logic.run_query_4()
+                session_logic.run_query_3()
             elif secondChoice == "4":
-                session_logic.run_query_5()
+                session_logic.run_query_4()
             elif secondChoice == "5":
-                session_logic.run_query_6()
+                session_logic.run_query_5()
             elif secondChoice == "6":
-                session_logic.run_query_7()
+                session_logic.run_query_6()
             elif secondChoice == "7":
-                session_logic.run_query_8()
+                session_logic.run_query_7()
             elif secondChoice == "8":
+                session_logic.run_query_8()
+            elif secondChoice == "9":
                 session_logic.run_query_9()
-            elif secondChoice == "0":
-                pass
-            else:
-                print("  Invalid option.")
+
         elif choice == "0":
             print("\n  Goodbye!\n")
             break
@@ -179,7 +174,6 @@ def main():
             print("  Invalid option.")
 
 if __name__ == "__main__":
-    # Ensure the mysql-connector-python package is installed
     try:
         import mysql.connector
     except ImportError:
