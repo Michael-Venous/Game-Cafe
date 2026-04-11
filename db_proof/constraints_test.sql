@@ -13,7 +13,7 @@ INSERT INTO Employee (Employee_id, Role, HourlyWage) VALUES (999, 'Manager', 20)
 -- Constraint: CHECK (difficulty >= 1 AND difficulty <= 10)
 -- Expected Error: ERROR 3819 (HY000): Check constraint 'game_chk_1' is violated.
 -- ============================================================
-INSERT INTO game (title, genre, difficulty)
+INSERT INTO Game (title, genre, difficulty)
 VALUES ('TestGame', 'RPG', 15);
 
 

@@ -1,7 +1,6 @@
 import sys
 import os
 
-# This allows the frontend to import your backend logic
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend import session_logic
 

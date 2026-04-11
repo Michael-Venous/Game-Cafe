@@ -5,8 +5,8 @@ INSERT INTO Employee (Employee_id, Name, Role, HourlyWage) VALUES
 (125, 'John Jacobs', 'Technician', 35),
 (231, 'John Jacobs', 'Game Attendant', 35);
 
--- Aadil Qureshi's MenuItem Data
-INSERT INTO MenuItem (Item_id, Name, Category, Price) VALUES
+-- Aadil Qureshi's Menu_Item Data
+INSERT INTO Menu_Item (Item_id, Name, Category, Price) VALUES
 (561, 'Burger', 'Main Course', 9.99),
 (289, 'Fries', 'Side Dish', 4.35);
 
@@ -15,25 +15,23 @@ INSERT INTO Customer (Customer_id, Name, email, Membership) VALUES
 (161, 'John Doe', 'john.doe@example.com', TRUE),
 (301, 'Peter Jones', 'peter.jones@example.com', FALSE);
 
-
 -- Nikolas Enriquez's Station Data
-INSERT INTO station (station_type, hourly_rate, availability) VALUES
+INSERT INTO Station (station_type, hourly_rate, availability) VALUES
 ('PC', 15, TRUE),
 ('VR', 25, FALSE),
 ('Console', 12, TRUE);
 
 -- Nikolas Enriquez's Game Data
-INSERT INTO game (title, genre, difficulty) VALUES
+INSERT INTO Game (title, genre, difficulty) VALUES
 ('Silksong', 'Metroidvania', 8),
 ('CounterStrike', 'FPS', 10),
 ('Balatro', 'Roguelike', 3);
 
 -- Nikolas Enriquez's Station_Game Data
-INSERT INTO station_game (station_id, game_id) VALUES
+INSERT INTO Station_Game (station_id, game_id) VALUES
 (1, 1), (1, 2), (1, 3),
 (2, 2),
 (3, 1), (3, 3);
-
 
 -- Michael Venous's SESSION DATA
 INSERT INTO Session (customer_id, station_id, start_time, end_time, total_cost) VALUES

@@ -41,7 +41,6 @@ def confirm(msg="Are you sure? (y/n): "):
     return input(msg).strip().lower() == "y"
 
 def print_table(headers, rows):
-    """Helper function from Aadil's code to format terminal output cleanly."""
     if not rows:
         print("  (no records found)")
         return
@@ -56,7 +55,7 @@ def print_table(headers, rows):
     print(fmt.format(*headers))
     print(sep)
     for row in rows:
-        # Convert None values to "NULL" or "Active" for better readability
+        # Convert None values to "NULL" or "Active"
         clean_row = [val if val is not None else "Active" for val in row]
         print(fmt.format(*clean_row))
 
@@ -187,7 +186,7 @@ def view_menuitems():
     try:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("SELECT Item_id, Name, Category, Price FROM MenuItem ORDER BY Item_id")
+        cur.execute("SELECT Item_id, Name, Category, Price FROM Menu_Item ORDER BY Item_id")
         rows = cur.fetchall()
         print_table(["Item ID", "Name", "Category", "Price ($)"], rows)
         cur.close(); conn.close()
@@ -202,7 +201,7 @@ def search_menuitem():
     try:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("SELECT Item_id, Name, Category, Price FROM MenuItem WHERE Item_id = %s", (iid,))
+        cur.execute("SELECT Item_id, Name, Category, Price FROM Menu_Item WHERE Item_id = %s", (iid,))
         rows = cur.fetchall()
         print_table(["Item ID", "Name", "Category", "Price ($)"], rows)
         cur.close(); conn.close()
@@ -224,7 +223,7 @@ def add_menuitem():
         conn = get_connection()
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO MenuItem (Item_id, Name, Category, Price) VALUES (%s, %s, %s, %s)",
+            "INSERT INTO Menu_Item (Item_id, Name, Category, Price) VALUES (%s, %s, %s, %s)",
             (iid, name, category, price)
         )
         conn.commit()
@@ -242,7 +241,7 @@ def update_menuitem_price():
     try:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("UPDATE MenuItem SET Price = %s WHERE Item_id = %s", (price, iid))
+        cur.execute("UPDATE Menu_Item SET Price = %s WHERE Item_id = %s", (price, iid))
         conn.commit()
         if cur.rowcount:
             print(f"  Price updated for item {iid}.")
@@ -262,7 +261,7 @@ def delete_menuitem():
     try:
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("DELETE FROM MenuItem WHERE Item_id = %s", (iid,))
+        cur.execute("DELETE FROM Menu_Item WHERE Item_id = %s", (iid,))
         conn.commit()
         if cur.rowcount:
             print(f"  Item {iid} deleted.")
@@ -458,9 +457,9 @@ def run_query_4():
         cur = conn.cursor()
         cur.execute("""
             SELECT s.station_id, s.station_type, g.title, g.genre, g.difficulty
-            FROM station s
-            JOIN station_game sg ON s.station_id = sg.station_id
-            JOIN game g ON sg.game_id = g.game_id
+            FROM Station s
+            JOIN Station_Game sg ON s.station_id = sg.station_id
+            JOIN Game g ON sg.game_id = g.game_id
         """)
         rows = cur.fetchall()
         print_table(["Station ID", "Type", "Game Title", "Genre", "Difficulty"], rows)
@@ -496,7 +495,7 @@ def run_query_6():
             SELECT c.Name AS customer_name, s.station_type, sess.start_time
             FROM Session sess
             JOIN Customer c ON sess.customer_id = c.Customer_id
-            JOIN station s ON sess.station_id = s.station_id
+            JOIN Station s ON sess.station_id = s.station_id
             WHERE sess.end_time IS NULL
         """)
         rows = cur.fetchall()
@@ -517,7 +516,7 @@ def run_query_7():
             JOIN Customer c ON o.customer_id = c.Customer_id
             JOIN Employee e ON o.employee_id = e.Employee_id
             JOIN Order_Item oi ON o.order_id = oi.order_id
-            JOIN MenuItem mi ON oi.item_id = mi.Item_id
+            JOIN Menu_Item mi ON oi.item_id = mi.Item_id
         """)
         rows = cur.fetchall()
         print_table(["Customer", "Employee", "Item", "Quantity", "Subtotal ($)"], rows)
@@ -533,7 +532,7 @@ def run_query_8():
         cur = conn.cursor()
         cur.execute("""
             SELECT s.station_id, s.station_type, COUNT(sess.session_id) AS total_sessions, SUM(sess.total_cost) AS total_revenue
-            FROM station s
+            FROM Station s
             LEFT JOIN Session sess ON s.station_id = sess.station_id
             GROUP BY s.station_id, s.station_type
         """)

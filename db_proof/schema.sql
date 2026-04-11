@@ -11,7 +11,7 @@ CREATE TABLE Employee (
     PRIMARY KEY (Employee_id)
 );
 
-CREATE TABLE MenuItem (
+CREATE TABLE Menu_Item (
     Item_id INT UNIQUE NOT NULL,
     Name VARCHAR(15) NOT NULL,
     Category VARCHAR(30) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE Customer (
 );
 
 -- Nikolas Enriquez's tables
-CREATE TABLE station (
+CREATE TABLE Station (
     station_id INT NOT NULL AUTO_INCREMENT,
     station_type VARCHAR(7) NOT NULL,
     hourly_rate INT NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE station (
     PRIMARY KEY (station_id)
 );
 
-CREATE TABLE game (
+CREATE TABLE Game (
     game_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(20) NOT NULL,
     genre VARCHAR(20) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE game (
 );
 
 
-CREATE TABLE station_game (
+CREATE TABLE Station_Game (
     station_id INT NOT NULL,
     game_id INT NOT NULL,
     PRIMARY KEY (station_id, game_id),
@@ -102,10 +102,11 @@ CREATE TABLE Order_Status (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
+-- Views
 CREATE VIEW view_session_summary AS
 SELECT
     se.session_id,
-    c.Name         AS customer_name,
+    c.Name AS customer_name,
     c.email,
     st.station_type,
     se.start_time,
@@ -113,8 +114,8 @@ SELECT
     se.total_cost,
     TIMESTAMPDIFF(MINUTE, se.start_time, se.end_time) AS duration_minutes
 FROM Session se
-JOIN Customer c  ON se.customer_id = c.Customer_id
-JOIN station st  ON se.station_id  = st.station_id;
+JOIN Customer c ON se.customer_id = c.Customer_id
+JOIN Station st ON se.station_id = st.station_id;
 
 CREATE VIEW view_station_availability AS
 SELECT
@@ -123,11 +124,12 @@ SELECT
     s.hourly_rate,
     s.availability,
     COUNT(g.game_id) AS num_games
-FROM station s
-LEFT JOIN station_game sg ON s.station_id = sg.station_id
-LEFT JOIN game g ON sg.game_id = g.game_id
+FROM Station s
+LEFT JOIN Station_Game sg ON s.station_id = sg.station_id
+LEFT JOIN Game g ON sg.game_id = g.game_id
 GROUP BY s.station_id, s.station_type, s.hourly_rate, s.availability;
 
+-- Triggers
 CREATE TRIGGER before_updated_at_update
 BEFORE UPDATE ON Order_Status
 FOR EACH ROW
