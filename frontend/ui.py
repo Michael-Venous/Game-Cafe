@@ -124,6 +124,7 @@ def main():
             print("  7. Query 7: Full Order Breakdown")
             print("  8. Query 8: Revenue per Station")
             print("  9. Query 9: Order Status & Notes")
+            print("  10. Top Station Report")
             print("  0. Back")
             secondChoice = input("\n  Select an option: ").strip()
 
@@ -145,6 +146,18 @@ def main():
                 session_logic.run_query_8()
             elif secondChoice == "9":
                 session_logic.run_query_9()
+            elif secondChoice == "10":
+                session_logic.header("CUSTOMER ORDER HISTORY")
+                cid = session_logic.prompt("Enter Customer ID")
+    
+                results = session_logic.get_customer_orders(cid)
+    
+                if isinstance(results, str):
+                    print(f"  {results}")
+                else:
+                    session_logic.print_table(["Order ID", "Date/Time", "Total ($)", "Status"], results)
+    
+                session_logic.pause()
 
         elif choice == "0":
             print("\n  Goodbye!\n")
