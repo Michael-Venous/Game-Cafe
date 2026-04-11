@@ -6,31 +6,11 @@ from backend import session_logic
 
 LINE = "─" * 70
 
-def print_table(headers, rows):
-    """Helper function to format terminal output cleanly."""
-    if not rows:
-        print("  (no records found)")
-        return
-    if isinstance(rows, str): # Catch DB errors
-        print(f"  {rows}")
-        return
-
-    widths = [max(len(str(h)), max((len(str(r[i])) for r in rows), default=0))
-              for i, h in enumerate(headers)]
-    fmt = "  " + "  ".join(f"{{:<{w}}}" for w in widths)
-    sep = "  " + "  ".join("-" * w for w in widths)
-    print(fmt.format(*headers))
-    print(sep)
-    for row in rows:
-        # Convert None values to "NULL" or "Active" for better readability
-        clean_row = [val if val is not None else "Active" for val in row]
-        print(fmt.format(*clean_row))
-
 def view_sessions():
     """Query 1: View all sessions logic."""
     print(f"\n{LINE}\n  ALL GAME CAFE SESSIONS\n{LINE}")
     rows = session_logic.get_all_sessions()
-    print_table(["Session ID", "Customer ID", "Station ID", "Start Time", "End Time", "Total Cost ($)"], rows)
+    session_logic.print_table(["Session ID", "Customer ID", "Station ID", "Start Time", "End Time", "Total Cost ($)"], rows)
     input("\nPress Enter to continue...")
 
 def start_new_session():

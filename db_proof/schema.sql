@@ -52,8 +52,8 @@ CREATE TABLE Station_Game (
     station_id INT NOT NULL,
     game_id INT NOT NULL,
     PRIMARY KEY (station_id, game_id),
-    CONSTRAINT fk_station_id FOREIGN KEY (station_id) REFERENCES station(station_id),
-    CONSTRAINT fk_game_id FOREIGN KEY (game_id) REFERENCES game(game_id)
+    CONSTRAINT fk_station_id FOREIGN KEY (station_id) REFERENCES Station(station_id),
+    CONSTRAINT fk_game_id FOREIGN KEY (game_id) REFERENCES Game(game_id)
 );
 
 -- Michael's table
@@ -66,7 +66,7 @@ CREATE TABLE Session (
     total_cost DECIMAL(10, 2),
     PRIMARY KEY (session_id),
     FOREIGN KEY (customer_id) REFERENCES Customer(Customer_id),
-    FOREIGN KEY (station_id) REFERENCES station(station_id)
+    FOREIGN KEY (station_id) REFERENCES Station(station_id)
 );
 
 -- Alec Borque's tables
@@ -89,7 +89,7 @@ CREATE TABLE Order_Item (
     subtotal DECIMAL(5, 2) NOT NULL CHECK (subtotal >= 0),
     PRIMARY KEY (order_id, item_id),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
-    FOREIGN KEY (item_id) REFERENCES MenuItem(Item_id)
+    FOREIGN KEY (item_id) REFERENCES Menu_Item(Item_id)
 );
 
 CREATE TABLE Order_Status (
