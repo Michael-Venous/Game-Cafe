@@ -368,6 +368,24 @@ def delete_customer():
         print(f"  DB Error: {e}")
     pause()
 
+def get_customer_orders(customer_id):
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        query = """
+            SELECT o.order_id, o.order_time, o.total_amount, os.status 
+            FROM Orders o
+            JOIN Order_Status os ON o.order_id = os.order_id
+            WHERE o.customer_id = %s
+            ORDER BY o.order_time DESC
+        """
+        cur.execute(query, (customer_id,))
+        rows = cur.fetchall()
+        cur.close(); conn.close()
+        return rows
+    except Error as e:
+        return f"Error: {e}"
+
 def view_session_summary():
     header("Session Summary (via view)")
     try:
